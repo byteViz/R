@@ -1,0 +1,52 @@
+---
+title: "Week 1 Peer Review"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+
+######DO NOT MODIFY. This will load required packages and data.
+
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+cel <- drop_na(read_csv(url("https://www.dropbox.com/s/4ebgnkdhhxo5rac/cel_volden_wiseman%20_coursera.csv?raw=1")))
+```
+
+
+### Arun akchutha
+## Exercise 1
+
+```{r exercise1,echo=FALSE}
+cel <- cel %>% filter(congress==115)
+colnames(cel)[10] <- "gender"
+cel2 <- cel %>% mutate(gender = recode(gender,
+                                  '0' = "Male",
+                                  '1' = "Female"))
+ggplot(cel2,aes(x=dwnom1,y=all_pass,color = gender))+
+  geom_point()+
+  labs(y="Bills Passed", x="Ideology",color="Gender")
+```
+
+## Exercise 2
+
+```{r exercise2,echo=FALSE}
+cel3 <- cel2 %>% mutate(majority = recode(majority,
+                                  '0' = "Minority",
+                                  '1' = "Majority"))
+ggplot(cel3,aes(x=votepct,y=all_pass,color = gender))+
+  geom_point()+
+  labs(y="Bills Passed", x="Vote Percentage",color="Gender")+
+  facet_wrap(~majority)+
+  scale_color_manual(values = c("orange","green"))
+
+```
+
+
+## Exercise 3
+
+```{r exercise3,echo=FALSE}
+ggplot(cel3,aes(y=les, x=majority, group=majority))+
+  geom_boxplot()+
+  labs(y="Legislative Effectiveness", x="Majority or Minority",title = "LES in the 115th Congress")
+```
